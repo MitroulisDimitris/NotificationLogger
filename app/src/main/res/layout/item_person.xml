@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="@drawable/ripple_dark">
+
+    <!-- Avatar circle with initial -->
+    <TextView
+        android:id="@+id/tvAvatar"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:background="@drawable/circle_avatar"/>
+
+    <!-- Info column -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingStart="10dp">
+
+        <TextView
+            android:id="@+id/tvPersonName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tvPersonApp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#00D4FF"
+                android:textSize="11sp"
+                android:maxLines="1"/>
+            <TextView android:text=" · " android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:textColor="#445566" android:textSize="11sp"/>
+            <TextView
+                android:id="@+id/tvPersonLast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#556677"
+                android:textSize="11sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Stats column -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="end">
+
+        <TextView
+            android:id="@+id/tvPersonCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#00FFB3"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:fontFamily="monospace"
+            android:gravity="end"/>
+
+        <TextView
+            android:id="@+id/tvPersonPeak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#778899"
+            android:textSize="10sp"
+            android:fontFamily="monospace"
+            android:gravity="end"/>
+
+        <TextView
+            android:id="@+id/tvPersonTopType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#7B8FFF"
+            android:textSize="9sp"
+            android:gravity="end"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+    </LinearLayout>
+
+</LinearLayout>

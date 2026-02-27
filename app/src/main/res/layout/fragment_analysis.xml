@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView android:text="Analysis" android:textSize="24sp" android:textStyle="bold"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <Spinner android:id="@+id/spinnerDays"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Top Apps -->
+        <TextView android:text="📱 Top Apps by Volume"
+            android:textStyle="bold" android:textSize="16sp"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/tvTopAppsAnalysis"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:fontFamily="monospace" android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Heatmap -->
+        <TextView android:text="🌡️ Hourly Heatmap"
+            android:textStyle="bold" android:textSize="16sp"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/tvHeatmap"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:fontFamily="monospace" android:textSize="11sp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Topics -->
+        <TextView android:text="🏷️ Topic Breakdown"
+            android:textStyle="bold" android:textSize="16sp"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/tvTopics"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Doomscroll -->
+        <TextView android:text="📵 Doomscroll Bursts"
+            android:textStyle="bold" android:textSize="16sp"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:id="@+id/tvDoomScrollDetail"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:lineSpacingExtra="4dp"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Export -->
+        <Button android:id="@+id/btnExportCsv"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="📤 Export All Logs as CSV"/>
+
+    </LinearLayout>
+</ScrollView>

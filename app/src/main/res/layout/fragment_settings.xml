@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView android:text="Settings" android:textSize="24sp" android:textStyle="bold"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Privacy -->
+        <TextView android:text="🔒 Privacy" android:textStyle="bold" android:textSize="16sp"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+        <Switch android:id="@+id/swContentLogging"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Log notification content (title, text)"
+            android:layout_marginBottom="8dp"/>
+
+        <Switch android:id="@+id/swBiometric"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Require biometric/PIN to open app"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Data Management -->
+        <TextView android:text="🗑️ Data Management" android:textStyle="bold" android:textSize="16sp"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All logs are kept until you manually delete them."
+            android:textColor="#888888"
+            android:textSize="13sp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"/>
+
+        <Button android:id="@+id/btnDeleteAll"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="⚠️ Delete ALL Logs"
+            android:backgroundTint="#E53935"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Filters -->
+        <TextView android:text="🚫 App Filters" android:textStyle="bold" android:textSize="16sp"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp">
+            <Button android:id="@+id/btnAddBlacklist"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="+ Blacklist App"
+                android:backgroundTint="#E53935" android:layout_marginEnd="4dp"/>
+            <Button android:id="@+id/btnAddWhitelist"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="+ Whitelist App"
+                android:backgroundTint="#43A047" android:layout_marginStart="4dp"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvFilters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"/>
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0D1B2A">
+
+    <!-- Header row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:background="#111E2E">
+
+        <TextView
+            android:text="👥 People"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <Spinner
+            android:id="@+id/spinnerPeopleDays"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#00D4FF"/>
+    </LinearLayout>
+
+    <!-- Search bar -->
+    <SearchView
+        android:id="@+id/searchPeople"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Search by name or app..."
+        android:iconifiedByDefault="false"
+        android:background="#111E2E"
+        android:padding="4dp"/>
+
+    <!-- Result count -->
+    <TextView
+        android:id="@+id/tvPeopleCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading..."
+        android:textColor="#00D4FF"
+        android:textSize="11sp"
+        android:fontFamily="monospace"
+        android:paddingStart="12dp"
+        android:paddingBottom="4dp"/>
+
+    <!-- Column headers -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:background="#0A1520">
+
+        <TextView android:text="  " android:layout_width="40dp" android:layout_height="wrap_content"/>
+        <TextView android:text="NAME" android:layout_width="0dp" android:layout_height="wrap_content"
+            android:layout_weight="2" android:textColor="#556677" android:textSize="10sp" android:fontFamily="monospace"/>
+        <TextView android:text="COUNT" android:layout_width="50dp" android:layout_height="wrap_content"
+            android:textColor="#556677" android:textSize="10sp" android:fontFamily="monospace" android:gravity="end"/>
+        <TextView android:text="PEAK" android:layout_width="70dp" android:layout_height="wrap_content"
+            android:textColor="#556677" android:textSize="10sp" android:fontFamily="monospace" android:gravity="end"/>
+        <TextView android:text="TYPE" android:layout_width="80dp" android:layout_height="wrap_content"
+            android:textColor="#556677" android:textSize="10sp" android:fontFamily="monospace" android:gravity="end"/>
+    </LinearLayout>
+
+    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#1A3040"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPeople"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"/>
+
+</LinearLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.notificationlogger.ui.dashboard.DashboardFragment"
+        android:label="Dashboard"/>
+
+    <fragment
+        android:id="@+id/explorerFragment"
+        android:name="com.notificationlogger.ui.explorer.ExplorerFragment"
+        android:label="Explorer"/>
+
+    <fragment
+        android:id="@+id/peopleFragment"
+        android:name="com.notificationlogger.ui.people.PeopleFragment"
+        android:label="People"/>
+
+    <fragment
+        android:id="@+id/analysisFragment"
+        android:name="com.notificationlogger.ui.analysis.AnalysisFragment"
+        android:label="Analysis"/>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.notificationlogger.ui.settings.SettingsFragment"
+        android:label="Settings"/>
+
+</navigation>

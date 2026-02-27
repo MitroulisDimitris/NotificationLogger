@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/dashboardFragment"
+        android:title="Home"
+        android:icon="@android:drawable/ic_menu_info_details"/>
+
+    <item
+        android:id="@+id/explorerFragment"
+        android:title="Explorer"
+        android:icon="@android:drawable/ic_menu_search"/>
+
+    <item
+        android:id="@+id/peopleFragment"
+        android:title="People"
+        android:icon="@android:drawable/ic_menu_myplaces"/>
+
+    <item
+        android:id="@+id/analysisFragment"
+        android:title="Analysis"
+        android:icon="@android:drawable/ic_menu_sort_by_size"/>
+
+    <item
+        android:id="@+id/settingsFragment"
+        android:title="Settings"
+        android:icon="@android:drawable/ic_menu_preferences"/>
+
+</menu>
