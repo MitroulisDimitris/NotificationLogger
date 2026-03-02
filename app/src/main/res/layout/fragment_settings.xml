@@ -2,41 +2,47 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#0D1B2A"
     android:padding="16dp">
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView android:text="Settings" android:textSize="24sp" android:textStyle="bold"
+        <TextView android:text="⚙️ Settings"
+            android:textSize="22sp" android:textStyle="bold" android:textColor="#FFFFFF"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="20dp"/>
 
         <!-- Privacy -->
-        <TextView android:text="🔒 Privacy" android:textStyle="bold" android:textSize="16sp"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-
+        <TextView android:text="🔒 Privacy"
+            android:textStyle="bold" android:textSize="15sp" android:textColor="#00D4FF"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
         <Switch android:id="@+id/swContentLogging"
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="Log notification content (title, text)"
-            android:layout_marginBottom="8dp"/>
-
+            android:textColor="#CCDDEE" android:layout_marginBottom="8dp"/>
         <Switch android:id="@+id/swBiometric"
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:text="Require biometric/PIN to open app"
-            android:layout_marginBottom="16dp"/>
+            android:textColor="#CCDDEE" android:layout_marginBottom="24dp"/>
 
         <!-- Data Management -->
-        <TextView android:text="🗑️ Data Management" android:textStyle="bold" android:textSize="16sp"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <TextView android:text="🗃️ Data Management"
+            android:textStyle="bold" android:textSize="15sp" android:textColor="#00D4FF"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="All logs are kept until you manually delete them."
-            android:textColor="#888888"
-            android:textSize="13sp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="12dp"/>
+        <!-- Import CSV -->
+        <TextView android:text="Import a CSV file to replace ALL current data."
+            android:textColor="#778899" android:textSize="12sp"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"/>
+        <Button android:id="@+id/btnImportCsv"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="📥 Import CSV (replaces all data)"
+            android:backgroundTint="#1565C0"
+            android:layout_marginBottom="8dp"/>
 
         <Button android:id="@+id/btnDeleteAll"
             android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -44,13 +50,36 @@
             android:backgroundTint="#E53935"
             android:layout_marginBottom="24dp"/>
 
-        <!-- Filters -->
-        <TextView android:text="🚫 App Filters" android:textStyle="bold" android:textSize="16sp"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        <!-- Person Aliases -->
+        <TextView android:text="👤 Person Aliases"
+            android:textStyle="bold" android:textSize="15sp" android:textColor="#00D4FF"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"/>
+        <TextView android:text="Merge different sender names into one person. Non-destructive — original data is unchanged."
+            android:textColor="#778899" android:textSize="12sp"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
 
+        <Button android:id="@+id/btnAddAlias"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="+ Add Name Alias"
+            android:backgroundTint="#2E7D32"
+            android:layout_marginBottom="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAliases"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- App Filters -->
+        <TextView android:text="🚫 App Filters"
+            android:textStyle="bold" android:textSize="15sp" android:textColor="#00D4FF"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="horizontal" android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
+            android:orientation="horizontal" android:layout_marginBottom="8dp">
             <Button android:id="@+id/btnAddBlacklist"
                 android:layout_width="0dp" android:layout_height="wrap_content"
                 android:layout_weight="1" android:text="+ Blacklist App"
@@ -60,7 +89,6 @@
                 android:layout_weight="1" android:text="+ Whitelist App"
                 android:backgroundTint="#43A047" android:layout_marginStart="4dp"/>
         </LinearLayout>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFilters"
             android:layout_width="match_parent"

@@ -57,3 +57,10 @@ data class AppEntry(
 data class TypeEntry(
     val notificationType: String
 )
+
+/** Raw hour stats for stddev computation — returned by getSenderHourStats */
+data class HourStatsRaw(
+    val hourSum: Double,
+    val hourSumSq: Double,
+    val cnt: Int
+)

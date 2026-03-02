@@ -10,27 +10,23 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Drag handle -->
         <View android:layout_width="40dp" android:layout_height="4dp"
             android:background="#334455"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Header: avatar + name/stats -->
+        <!-- Header -->
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
             android:orientation="horizontal" android:gravity="center_vertical"
-            android:layout_marginBottom="20dp">
-
+            android:layout_marginBottom="16dp">
             <TextView android:id="@+id/tvDetailAvatar"
                 android:layout_width="56dp" android:layout_height="56dp"
                 android:gravity="center" android:textColor="#FFFFFF"
                 android:textStyle="bold" android:textSize="22sp"
                 android:background="@drawable/circle_avatar"/>
-
             <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
                 android:layout_weight="1" android:orientation="vertical"
                 android:paddingStart="14dp">
-
                 <TextView android:id="@+id/tvDetailName"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
                     android:textColor="#FFFFFF" android:textSize="20sp" android:textStyle="bold"/>
@@ -43,49 +39,68 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Stats chips row -->
+        <!-- Stats chips -->
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="horizontal" android:layout_marginBottom="20dp">
-
+            android:orientation="horizontal" android:layout_marginBottom="8dp">
             <TextView android:id="@+id/tvDetailPeak"
-                android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
                 android:background="#111E2E" android:padding="8dp"
-                android:textColor="#00D4FF" android:textSize="11sp"
-                android:gravity="center" android:layout_marginEnd="4dp"/>
-
+                android:textColor="#00D4FF" android:textSize="11sp" android:gravity="center"
+                android:layout_marginEnd="4dp"/>
             <TextView android:id="@+id/tvDetailLast"
-                android:layout_width="0dp" android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
                 android:background="#111E2E" android:padding="8dp"
-                android:textColor="#778899" android:textSize="11sp"
-                android:gravity="center" android:layout_marginStart="4dp"/>
+                android:textColor="#778899" android:textSize="11sp" android:gravity="center"
+                android:layout_marginStart="4dp"/>
         </LinearLayout>
 
         <TextView android:id="@+id/tvDetailTopType"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:background="#1A2E45" android:padding="8dp"
             android:textColor="#7B8FFF" android:textSize="12sp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="12dp"/>
 
-        <!-- Hourly activity chart -->
+        <!-- Schedule stats card -->
+        <TextView android:text="📅 Schedule Analysis"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textColor="#AABBCC" android:textSize="13sp" android:textStyle="bold"
+            android:layout_marginBottom="6dp"/>
+
+        <TextView android:id="@+id/tvScheduleStats"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:background="#111E2E" android:padding="12dp"
+            android:textColor="#CCDDEE" android:textSize="12sp"
+            android:fontFamily="monospace" android:lineSpacingMultiplier="1.4"
+            android:layout_marginBottom="20dp"
+            android:text="Loading…"/>
+
+        <!-- Hourly chart -->
         <TextView android:text="⏰ Activity by Hour"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:textColor="#AABBCC" android:textSize="13sp" android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
-
+            android:layout_marginBottom="6dp"/>
         <com.notificationlogger.widget.BarChartView
             android:id="@+id/chartPersonHourly"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="130dp"
             android:layout_marginBottom="20dp"/>
 
-        <!-- Type breakdown chart -->
+        <!-- Day-of-week chart -->
+        <TextView android:text="📆 Activity by Day of Week"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:textColor="#AABBCC" android:textSize="13sp" android:textStyle="bold"
+            android:layout_marginBottom="6dp"/>
+        <com.notificationlogger.widget.BarChartView
+            android:id="@+id/chartPersonDayOfWeek"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Type breakdown -->
         <TextView android:text="📊 Notification Types"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:textColor="#AABBCC" android:textSize="13sp" android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
-
+            android:layout_marginBottom="6dp"/>
         <com.notificationlogger.widget.BarChartView
             android:id="@+id/chartPersonTypes"
             android:layout_width="match_parent"

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="12dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="#111E2E">
+
+    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+        android:layout_weight="1" android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvAliasRaw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#CCDDEE"
+            android:textSize="13sp"
+            android:fontFamily="monospace"/>
+
+        <TextView
+            android:id="@+id/tvAliasCanonical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#00FFB3"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Tap to remove one alias; long-press to remove entire group -->
+    <TextView
+        android:id="@+id/btnRemoveAlias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="✕"
+        android:textColor="#FF6680"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"/>
+
+</LinearLayout>

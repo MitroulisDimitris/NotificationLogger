@@ -37,6 +37,9 @@ class NotificationLoggerService : NotificationListenerService() {
     private lateinit var prefs: PrefsHelper
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
+    // Fast dedup: skip if the same key fires twice in a row (rapid repost)
+    @Volatile private var previousKey: String? = null
+
     // MessagingStyle apps: tracks how many messages already logged per notification key
     private val messagingCounts = mutableMapOf<String, Int>()
 
@@ -61,6 +64,12 @@ class NotificationLoggerService : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         val pkg = sbn.packageName
         if (pkg == packageName) return
+
+        // Fast dedup: consecutive identical keys are re-posts of the same notification
+        // (e.g. app updating a progress bar). The MessagingStyle path handles the real
+        // incremental message dedup; this catches everything else.
+        if (sbn.key == previousKey && pkg !in MESSENGER_PACKAGES) return
+        previousKey = sbn.key
 
         serviceScope.launch {
             try {

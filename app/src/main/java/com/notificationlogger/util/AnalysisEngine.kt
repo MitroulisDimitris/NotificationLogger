@@ -92,12 +92,14 @@ object AnalysisEngine {
             return NotificationType.CALL_ENDED
 
         // ── 2. Reactions (check BEFORE generic message — reactions have no long text) ──
-        if (combined.containsAny(
-                "reacted to", "reacted with", "liked your", "loved your",
-                "laughed at", "emphasized", "questioned your",
-                "😂", "❤️", "👍", "😍", "😢", "🔥", "😮", "🎉", "💯",
-                "reacted to your message", "reaction to"
-            )) return NotificationType.REACTION
+        // IMPORTANT: only classify as REACTION if there is explicit reaction phrasing.
+        // Emoji-only messages (e.g. "❤️" or "😂😂") are still messages, not reactions.
+        val hasReactionPhrase = combined.containsAny(
+            "reacted to", "reacted with", "liked your", "loved your",
+            "laughed at", "emphasized", "questioned your",
+            "reacted to your message", "reaction to"
+        )
+        if (hasReactionPhrase) return NotificationType.REACTION
 
         // ── 3. Story interactions ──────────────────────────────────────────────
         if (combined.containsAny("reacted to your story", "replied to your story",

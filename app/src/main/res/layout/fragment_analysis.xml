@@ -2,59 +2,85 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#0D1B2A"
     android:padding="16dp">
 
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView android:text="Analysis" android:textSize="24sp" android:textStyle="bold"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"/>
+        <!-- Header + days picker -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+            <TextView android:text="📊 Analysis"
+                android:textSize="22sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"/>
+            <Spinner android:id="@+id/spinnerDays"
+                android:layout_width="130dp" android:layout_height="wrap_content"
+                android:backgroundTint="#00D4FF"/>
+        </LinearLayout>
 
-        <Spinner android:id="@+id/spinnerDays"
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- Top Apps -->
+        <!-- Top apps -->
         <TextView android:text="📱 Top Apps by Volume"
-            android:textStyle="bold" android:textSize="16sp"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            android:textStyle="bold" android:textSize="14sp" android:textColor="#AABBCC"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"/>
         <TextView android:id="@+id/tvTopAppsAnalysis"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:fontFamily="monospace" android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:background="#111E2E" android:padding="12dp"
+            android:fontFamily="monospace" android:textColor="#CCDDEE" android:textSize="12sp"
+            android:lineSpacingExtra="4dp" android:layout_marginBottom="20dp"/>
 
-        <!-- Heatmap -->
-        <TextView android:text="🌡️ Hourly Heatmap"
-            android:textStyle="bold" android:textSize="16sp"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-        <TextView android:id="@+id/tvHeatmap"
+        <!-- Hourly chart -->
+        <TextView android:id="@+id/tvHeatmapHeader"
+            android:text="🌡️ Hourly Activity"
+            android:textStyle="bold" android:textSize="14sp" android:textColor="#AABBCC"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:fontFamily="monospace" android:textSize="11sp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="6dp"/>
+        <com.notificationlogger.widget.BarChartView
+            android:id="@+id/chartHourly"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginBottom="20dp"/>
 
-        <!-- Topics -->
+        <!-- Day-of-week chart -->
+        <TextView android:text="📆 Activity by Day of Week"
+            android:textStyle="bold" android:textSize="14sp" android:textColor="#AABBCC"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"/>
+        <com.notificationlogger.widget.BarChartView
+            android:id="@+id/chartDayOfWeek"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Topic breakdown -->
         <TextView android:text="🏷️ Topic Breakdown"
-            android:textStyle="bold" android:textSize="16sp"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            android:textStyle="bold" android:textSize="14sp" android:textColor="#AABBCC"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"/>
         <TextView android:id="@+id/tvTopics"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:background="#111E2E" android:padding="12dp"
+            android:textColor="#CCDDEE" android:textSize="13sp"
+            android:lineSpacingExtra="4dp" android:layout_marginBottom="20dp"/>
 
-        <!-- Doomscroll -->
+        <!-- Doomscroll bursts -->
         <TextView android:text="📵 Doomscroll Bursts"
-            android:textStyle="bold" android:textSize="16sp"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-        <TextView android:id="@+id/tvDoomScrollDetail"
+            android:textStyle="bold" android:textSize="14sp" android:textColor="#AABBCC"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:lineSpacingExtra="4dp"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginBottom="6dp"/>
+        <TextView android:id="@+id/tvDoomScrollDetail"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:background="#111E2E" android:padding="12dp"
+            android:textColor="#CCDDEE" android:textSize="13sp"
+            android:lineSpacingExtra="4dp" android:layout_marginBottom="24dp"/>
 
         <!-- Export -->
         <Button android:id="@+id/btnExportCsv"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="📤 Export All Logs as CSV"/>
+            android:text="📤 Export All Logs as CSV"
+            android:backgroundTint="#00D4FF" android:textColor="#000000"/>
 
     </LinearLayout>
 </ScrollView>

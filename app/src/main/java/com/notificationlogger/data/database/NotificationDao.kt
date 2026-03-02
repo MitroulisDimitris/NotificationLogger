@@ -3,7 +3,6 @@ package com.notificationlogger.data.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.notificationlogger.data.model.*
-
 @Dao
 interface NotificationDao {
 
@@ -189,4 +188,62 @@ interface NotificationDao {
 
     @Query("SELECT DISTINCT notificationType FROM notification_logs WHERE event='POSTED' ORDER BY notificationType ASC")
     suspend fun getDistinctTypes(): List<TypeEntry>
+
+    // ─── PER-DAY-OF-WEEK ───────────────────────────────────────────────────────
+
+    @Query("""
+        SELECT
+            CAST(strftime('%w', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER) as dayOfWeek,
+            COUNT(*) as count
+        FROM notification_logs
+        WHERE event = 'POSTED' AND postTime >= :since
+          AND (:pkg IS NULL OR packageName = :pkg)
+          AND (:sender IS NULL OR title = :sender)
+        GROUP BY dayOfWeek
+        ORDER BY dayOfWeek
+    """)
+    suspend fun getDayOfWeekDist(since: Long, pkg: String? = null, sender: String? = null): List<DayOfWeekCount>
+
+    // ─── HOURLY × DAY-OF-WEEK HEATMAP ─────────────────────────────────────────
+
+    @Query("""
+        SELECT
+            CAST(strftime('%H', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER) as hour,
+            CAST(strftime('%w', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER) as dayOfWeek,
+            COUNT(*) as count
+        FROM notification_logs
+        WHERE event = 'POSTED' AND postTime >= :since
+          AND (:pkg IS NULL OR packageName = :pkg)
+          AND (:sender IS NULL OR title = :sender)
+        GROUP BY hour, dayOfWeek
+        ORDER BY dayOfWeek, hour
+    """)
+    suspend fun getHourDayHeatmap(since: Long, pkg: String? = null, sender: String? = null): List<HourDayCount>
+
+    // ─── SENDER STATS WITH STDDEV ──────────────────────────────────────────────
+    // SQLite has no built-in stddev; we compute variance as avg(x^2) - avg(x)^2
+    // then take sqrt in Kotlin. This query returns sum(hour), sum(hour^2), count
+    // so the caller can compute mean and stddev without a second query.
+
+    @Query("""
+        SELECT
+            CAST(SUM(CAST(strftime('%H', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER)) AS REAL) as hourSum,
+            CAST(SUM(CAST(strftime('%H', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER) *
+                     CAST(strftime('%H', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER)) AS REAL) as hourSumSq,
+            COUNT(*) as cnt
+        FROM notification_logs
+        WHERE event = 'POSTED'
+          AND title = :sender
+          AND packageName = :pkg
+          AND postTime >= :since
+    """)
+    suspend fun getSenderHourStats(sender: String, pkg: String, since: Long): HourStatsRaw?
+
+    // ─── IMPORT: wipe + bulk insert ────────────────────────────────────────────
+
+    @Query("DELETE FROM notification_logs")
+    suspend fun deleteAllLogs()
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(logs: List<NotificationLog>)
 }
