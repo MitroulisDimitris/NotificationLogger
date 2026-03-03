@@ -91,12 +91,41 @@ class NotificationRepository(context: Context) {
     suspend fun getSenderTypeBreakdown(sender: String, pkg: String, sinceDays: Int) =
         dao.getSenderTypeBreakdown(sender, pkg, System.currentTimeMillis() - sinceDays * 86_400_000L)
 
+    /**
+     * Resolves a canonical name to all its raw names.
+     * If no aliases exist for this name, returns listOf(canonicalName) so
+     * single-name persons work identically.
+     */
+    suspend fun resolveToRawNames(canonicalName: String): List<String> {
+        val aliases = aliasDao.getAliasesForCanonical(canonicalName)
+        return if (aliases.isEmpty()) listOf(canonicalName)
+               else aliases.map { it.rawName }
+    }
+
+    suspend fun getSenderHourlyDistMulti(names: List<String>, sinceDays: Int) =
+        dao.getSenderHourlyDistMulti(names, System.currentTimeMillis() - sinceDays * 86_400_000L)
+
+    suspend fun getSenderTypeBreakdownMulti(names: List<String>, sinceDays: Int) =
+        dao.getSenderTypeBreakdownMulti(names, System.currentTimeMillis() - sinceDays * 86_400_000L)
+
+    suspend fun getDayOfWeekDistMulti(names: List<String>, sinceDays: Int) =
+        dao.getDayOfWeekDistMulti(names, System.currentTimeMillis() - sinceDays * 86_400_000L)
+
+    suspend fun getHourDayHeatmapMulti(names: List<String>, sinceDays: Int) =
+        dao.getHourDayHeatmapMulti(names, System.currentTimeMillis() - sinceDays * 86_400_000L)
+
+    suspend fun getSenderHourStatsMulti(names: List<String>, sinceDays: Int) =
+        dao.getSenderHourStatsMulti(names, System.currentTimeMillis() - sinceDays * 86_400_000L)
+
     // ─── Explorer ──────────────────────────────────────────────────────────────
 
     suspend fun explorerQuery(
         since: Long, pkg: String?, type: String?,
         sender: String?, query: String?, limit: Int, offset: Int
     ) = dao.explorerQuery(since, pkg, type, sender, query, limit, offset)
+
+    suspend fun getDistinctSenders(sinceDays: Int = 90) =
+        dao.getDistinctSenders(System.currentTimeMillis() - sinceDays * 86_400_000L)
 
     suspend fun getDistinctApps() = dao.getDistinctApps()
     suspend fun getDistinctTypes() = dao.getDistinctTypes()

@@ -115,7 +115,46 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val senderStats: LiveData<List<SenderStats>> = _senderStats
 
     fun loadSenderStats(sinceDays: Int = 30, pkg: String? = null) = viewModelScope.launch {
-        _senderStats.postValue(repo.getSenderStats(sinceDays, pkg))
+        val raw     = repo.getSenderStats(sinceDays, pkg)
+        val aliases = repo.getAllAliasesSuspend()
+        // Build rawName → canonicalName lookup
+        val aliasMap = aliases.associate { it.rawName to it.canonicalName }
+
+        // Group raw stats by resolved (canonical) name
+        val grouped = mutableMapOf<String, MutableList<SenderStats>>()
+        for (stat in raw) {
+            val key = aliasMap[stat.sender] ?: stat.sender
+            grouped.getOrPut(key) { mutableListOf() }.add(stat)
+        }
+
+        // Merge each group into a single SenderStats row
+        val merged = grouped.map { (canonicalName, stats) ->
+            if (stats.size == 1) {
+                // No merge needed, but update display name if aliased
+                stats[0].copy(sender = canonicalName)
+            } else {
+                SenderStats(
+                    sender       = canonicalName,
+                    packageName  = stats.maxByOrNull { it.messageCount }!!.packageName,
+                    appName      = stats.maxByOrNull { it.messageCount }!!.appName,
+                    messageCount = stats.sumOf { it.messageCount },
+                    lastSeen     = stats.maxOf { it.lastSeen },
+                    peakHour     = stats.maxByOrNull { it.messageCount }!!.peakHour,
+                    topType      = stats.maxByOrNull { it.messageCount }!!.topType
+                )
+            }
+        }.sortedByDescending { it.messageCount }
+
+        _senderStats.postValue(merged)
+    }
+
+    // Distinct sender names for the alias picker dialog
+    private val _distinctSenders = MutableLiveData<List<String>>()
+    val distinctSenders: LiveData<List<String>> = _distinctSenders
+
+    fun loadDistinctSenders(sinceDays: Int = 90) = viewModelScope.launch {
+        val names = repo.getDistinctSenders(sinceDays).map { it.sender }
+        _distinctSenders.postValue(names)
     }
 
     // Per-sender drill-down
@@ -138,18 +177,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val senderHourDay: LiveData<List<HourDayCount>> = _senderHourDay
 
     fun loadSenderDetail(sender: String, pkg: String, sinceDays: Int = 90) = viewModelScope.launch {
-        _senderHourly.postValue(repo.getSenderHourlyDist(sender, pkg, sinceDays))
-        _senderTypes.postValue(repo.getSenderTypeBreakdown(sender, pkg, sinceDays))
-        _senderDayOfWeek.postValue(repo.getDayOfWeekDist(sinceDays, pkg, sender))
-        _senderHourDay.postValue(repo.getHourDayHeatmap(sinceDays, pkg, sender))
+        // Resolve canonical name → all raw names (includes itself if no aliases)
+        val rawNames = repo.resolveToRawNames(sender)
 
-        // Compute mean and stddev from raw hour sums
-        val raw = repo.getSenderHourStats(sender, pkg, sinceDays)
+        _senderHourly.postValue(repo.getSenderHourlyDistMulti(rawNames, sinceDays))
+        _senderTypes.postValue(repo.getSenderTypeBreakdownMulti(rawNames, sinceDays))
+        _senderDayOfWeek.postValue(repo.getDayOfWeekDistMulti(rawNames, sinceDays))
+        _senderHourDay.postValue(repo.getHourDayHeatmapMulti(rawNames, sinceDays))
+
+        val raw = repo.getSenderHourStatsMulti(rawNames, sinceDays)
         _senderScheduleStats.postValue(
             if (raw != null && raw.cnt > 1) {
-                val mean = raw.hourSum / raw.cnt
+                val mean     = raw.hourSum / raw.cnt
                 val variance = (raw.hourSumSq / raw.cnt) - (mean * mean)
-                val stdDev = sqrt(variance.coerceAtLeast(0.0))
+                val stdDev   = sqrt(variance.coerceAtLeast(0.0))
                 SenderScheduleStats(mean = mean, stdDev = stdDev, sampleCount = raw.cnt)
             } else null
         )

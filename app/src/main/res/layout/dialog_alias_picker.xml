@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#0D1B2A">
+
+    <!-- Title -->
+    <TextView
+        android:text="Map names → one person"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="4dp"/>
+
+    <!-- Subtitle -->
+    <TextView
+        android:text="Select all raw names that belong to the same person."
+        android:textColor="#778899"
+        android:textSize="12sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="12dp"/>
+
+    <!-- Canonical name input -->
+    <TextView
+        android:text="CANONICAL NAME"
+        android:textColor="#00D4FF"
+        android:textSize="10sp"
+        android:fontFamily="monospace"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="4dp"/>
+
+    <EditText
+        android:id="@+id/etCanonicalName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#111E2E"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#445566"
+        android:hint="e.g. Alex"
+        android:textSize="15sp"
+        android:padding="12dp"
+        android:inputType="textPersonName"
+        android:imeOptions="actionNext"/>
+
+    <!-- Divider -->
+    <View android:layout_width="match_parent" android:layout_height="1dp"
+        android:background="#1A3040" android:layout_marginTop="12dp"/>
+
+    <!-- Search bar for the list -->
+    <EditText
+        android:id="@+id/etAliasSearch"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        android:background="#111E2E"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#445566"
+        android:hint="🔍  Search sender names…"
+        android:textSize="13sp"
+        android:padding="10dp"
+        android:inputType="text"
+        android:imeOptions="actionSearch"
+        android:maxLines="1"/>
+
+    <!-- Selected count badge -->
+    <TextView
+        android:id="@+id/tvSelectedCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:textColor="#00FFB3"
+        android:textSize="11sp"
+        android:fontFamily="monospace"
+        android:text="0 selected"/>
+
+    <!-- Scrollable checkbox list -->
+    <ListView
+        android:id="@+id/lvSenders"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:divider="#1A3040"
+        android:dividerHeight="1dp"
+        android:choiceMode="multipleChoice"
+        android:background="#0D1B2A"
+        android:scrollbarThumbVertical="@android:color/darker_gray"/>
+
+    <!-- Divider -->
+    <View android:layout_width="match_parent" android:layout_height="1dp"
+        android:background="#1A3040"/>
+
+    <!-- Action buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <Button
+            android:id="@+id/btnAliasCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:backgroundTint="#1A3040"
+            android:textColor="#AABBCC"
+            android:layout_marginEnd="6dp"/>
+
+        <Button
+            android:id="@+id/btnAliasSave"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="✓ Save"
+            android:backgroundTint="#00D4FF"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:layout_marginStart="6dp"/>
+    </LinearLayout>
+
+</LinearLayout>

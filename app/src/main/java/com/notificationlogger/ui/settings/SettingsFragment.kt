@@ -128,40 +128,92 @@ class SettingsFragment : Fragment() {
     }
 
     private fun showAddAliasDialog() {
-        val inflater = layoutInflater
-        val dialogView = inflater.inflate(android.R.layout.simple_list_item_2, null)
+        vm.loadDistinctSenders(90)
+        vm.distinctSenders.observe(viewLifecycleOwner) { senderList ->
+            if (senderList.isNullOrEmpty()) return@observe
+            vm.distinctSenders.removeObservers(viewLifecycleOwner)
 
-        // Simple two-field dialog using EditTexts
-        val rawInput = EditText(requireContext()).apply {
-            hint = "Raw name (as it appears in notifications)"
-        }
-        val canonInput = EditText(requireContext()).apply {
-            hint = "Canonical name (display name to group under)"
-        }
-        val container = LinearLayout(requireContext()).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(48, 16, 48, 0)
-            addView(rawInput)
-            addView(canonInput)
-        }
+            // Inflate custom layout
+            val dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_alias_picker, null)
 
-        AlertDialog.Builder(requireContext())
-            .setTitle("Add Name Alias")
-            .setMessage("Map a raw sender name to a canonical display name.")
-            .setView(container)
-            .setPositiveButton("Add") { _, _ ->
-                val raw    = rawInput.text.toString().trim()
-                val canon  = canonInput.text.toString().trim()
-                if (raw.isNotEmpty() && canon.isNotEmpty()) {
-                    vm.addAlias(raw, canon)
-                    Toast.makeText(requireContext(),
-                        "\"$raw\" → \"$canon\" added", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(requireContext(), "Both fields required", Toast.LENGTH_SHORT).show()
+            val etCanonical  = dialogView.findViewById<EditText>(R.id.etCanonicalName)
+            val etSearch     = dialogView.findViewById<EditText>(R.id.etAliasSearch)
+            val lvSenders    = dialogView.findViewById<ListView>(R.id.lvSenders)
+            val tvCount      = dialogView.findViewById<TextView>(R.id.tvSelectedCount)
+            val btnSave      = dialogView.findViewById<Button>(R.id.btnAliasSave)
+            val btnCancel    = dialogView.findViewById<Button>(R.id.btnAliasCancel)
+
+            // Track checked state per name (independent of filter)
+            val selected = mutableSetOf<String>()
+
+            // Adapter with coloured rows
+            fun buildAdapter(names: List<String>): ArrayAdapter<String> {
+                return object : ArrayAdapter<String>(
+                    requireContext(),
+                    android.R.layout.simple_list_item_multiple_choice,
+                    names
+                ) {}
+            }
+
+            var displayedNames = senderList.toMutableList()
+            var adapter = buildAdapter(displayedNames)
+            lvSenders.adapter = adapter
+            lvSenders.choiceMode = ListView.CHOICE_MODE_MULTIPLE
+
+            fun refreshChecks() {
+                for (i in 0 until displayedNames.size) {
+                    lvSenders.setItemChecked(i, displayedNames[i] in selected)
+                }
+                tvCount.text = "${selected.size} selected"
+            }
+            refreshChecks()
+
+            // Item tap → toggle in selected set
+            lvSenders.setOnItemClickListener { _, _, position, _ ->
+                val name = displayedNames[position]
+                if (name in selected) selected.remove(name) else selected.add(name)
+                tvCount.text = "${selected.size} selected"
+            }
+
+            // Search filter
+            etSearch.addTextChangedListener(object : android.text.TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, st: Int, c: Int, a: Int) {}
+                override fun onTextChanged(s: CharSequence?, st: Int, b: Int, c: Int) {}
+                override fun afterTextChanged(s: android.text.Editable?) {
+                    val q = s?.toString()?.trim() ?: ""
+                    displayedNames = if (q.isEmpty()) senderList.toMutableList()
+                    else senderList.filter { it.contains(q, ignoreCase = true) }.toMutableList()
+                    adapter = buildAdapter(displayedNames)
+                    lvSenders.adapter = adapter
+                    refreshChecks()
+                }
+            })
+
+            val dialog = AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+                .setCancelable(true)
+                .create()
+
+            btnCancel.setOnClickListener { dialog.dismiss() }
+
+            btnSave.setOnClickListener {
+                val canon = etCanonical.text.toString().trim()
+                when {
+                    canon.isEmpty() -> etCanonical.error = "Required"
+                    selected.isEmpty() -> Toast.makeText(requireContext(),
+                        "Select at least one name", Toast.LENGTH_SHORT).show()
+                    else -> {
+                        selected.forEach { raw -> vm.addAlias(raw, canon) }
+                        Toast.makeText(requireContext(),
+                            "${selected.size} name(s) → \"$canon\"", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                    }
                 }
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+
+            dialog.show()
+        }
     }
 
     private fun showAddFilterDialog(type: String) {

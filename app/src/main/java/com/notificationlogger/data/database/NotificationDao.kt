@@ -183,6 +183,16 @@ interface NotificationDao {
         offset: Int
     ): List<ExplorerRow>
 
+    @Query("""
+        SELECT DISTINCT title as sender
+        FROM notification_logs
+        WHERE event = 'POSTED'
+          AND title IS NOT NULL AND title != ''
+          AND postTime >= :since
+        ORDER BY title ASC
+    """)
+    suspend fun getDistinctSenders(since: Long): List<SenderNameEntry>
+
     @Query("SELECT DISTINCT packageName, appName FROM notification_logs WHERE event='POSTED' ORDER BY appName ASC")
     suspend fun getDistinctApps(): List<AppEntry>
 
@@ -238,6 +248,73 @@ interface NotificationDao {
           AND postTime >= :since
     """)
     suspend fun getSenderHourStats(sender: String, pkg: String, since: Long): HourStatsRaw?
+
+    // ─── MULTI-NAME VARIANTS (for alias-merged persons) ────────────────────────
+    // Room supports List<String> parameters with the IN operator natively.
+
+    @Query("""
+        SELECT
+            CAST(strftime('%H', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER) as hour,
+            COUNT(*) as count
+        FROM notification_logs
+        WHERE event = 'POSTED'
+          AND title IN (:names)
+          AND postTime >= :since
+        GROUP BY hour
+        ORDER BY hour
+    """)
+    suspend fun getSenderHourlyDistMulti(names: List<String>, since: Long): List<HourlyCount>
+
+    @Query("""
+        SELECT notificationType as topicGroup, COUNT(*) as count
+        FROM notification_logs
+        WHERE event = 'POSTED'
+          AND title IN (:names)
+          AND postTime >= :since
+        GROUP BY notificationType
+        ORDER BY count DESC
+    """)
+    suspend fun getSenderTypeBreakdownMulti(names: List<String>, since: Long): List<TopicCount>
+
+    @Query("""
+        SELECT
+            CAST(strftime('%w', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER) as dayOfWeek,
+            COUNT(*) as count
+        FROM notification_logs
+        WHERE event = 'POSTED'
+          AND title IN (:names)
+          AND postTime >= :since
+        GROUP BY dayOfWeek
+        ORDER BY dayOfWeek
+    """)
+    suspend fun getDayOfWeekDistMulti(names: List<String>, since: Long): List<DayOfWeekCount>
+
+    @Query("""
+        SELECT
+            CAST(strftime('%H', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER) as hour,
+            CAST(strftime('%w', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER) as dayOfWeek,
+            COUNT(*) as count
+        FROM notification_logs
+        WHERE event = 'POSTED'
+          AND title IN (:names)
+          AND postTime >= :since
+        GROUP BY hour, dayOfWeek
+        ORDER BY dayOfWeek, hour
+    """)
+    suspend fun getHourDayHeatmapMulti(names: List<String>, since: Long): List<HourDayCount>
+
+    @Query("""
+        SELECT
+            CAST(SUM(CAST(strftime('%H', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER)) AS REAL) as hourSum,
+            CAST(SUM(CAST(strftime('%H', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER) *
+                     CAST(strftime('%H', datetime(postTime/1000,'unixepoch','localtime')) AS INTEGER)) AS REAL) as hourSumSq,
+            COUNT(*) as cnt
+        FROM notification_logs
+        WHERE event = 'POSTED'
+          AND title IN (:names)
+          AND postTime >= :since
+    """)
+    suspend fun getSenderHourStatsMulti(names: List<String>, since: Long): HourStatsRaw?
 
     // ─── IMPORT: wipe + bulk insert ────────────────────────────────────────────
 

@@ -58,6 +58,9 @@ data class TypeEntry(
     val notificationType: String
 )
 
+/** Projection for the sender name picker in alias dialog */
+data class SenderNameEntry(val sender: String)
+
 /** Raw hour stats for stddev computation — returned by getSenderHourStats */
 data class HourStatsRaw(
     val hourSum: Double,
